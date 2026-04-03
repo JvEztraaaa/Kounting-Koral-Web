@@ -79,7 +79,7 @@ function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
             </div>
           </div>
           <div className="mt-2.5 pt-2.5 border-t border-gray-200 dark:border-gray-600 text-right">
-            <p className="text-base sm:text-lg font-bold text-orange-600 dark:text-orange-400">
+            <p className="text-base sm:text-lg font-bold text-[var(--color-primary-dark)] dark:text-[var(--color-primary)]">
               PHP total: {formatCurrency(totals.totalPHP, 'PHP')}
             </p>
           </div>
@@ -110,7 +110,7 @@ function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
                   <p className="font-medium text-green-600 dark:text-green-400">
                     {formatCurrency(shift.earnings_cad, 'CAD')}
                   </p>
-                  <p className="text-xs text-orange-600 dark:text-orange-400">
+                  <p className="text-xs text-[var(--color-primary-dark)] dark:text-[var(--color-primary)]">
                     {formatCurrency(shift.earnings_php || 0, 'PHP')}
                   </p>
                 </div>

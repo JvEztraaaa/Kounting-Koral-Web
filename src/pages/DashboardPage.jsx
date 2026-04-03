@@ -17,7 +17,7 @@ import { calculateSummaryTotals, cn } from '../lib/utils.js';
 
 function DashboardPage() {
   const { data: shifts = [], isLoading, error, refetch } = useShifts();
-  const [viewMode, setViewMode] = useState('list'); // 'list', 'grid', 'table'
+  const [viewMode, setViewMode] = useState('grid'); // 'list', 'grid', 'table'
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingShift, setEditingShift] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -230,7 +230,7 @@ function DashboardPage() {
             Export
           </Button>
 
-          <Button onClick={() => setShowAddModal(true)}>
+          <Button onClick={() => setShowAddModal(true)} className="text-white hover:text-white">
             <Plus className="h-4 w-4 mr-2" />
             Add Shift
             <kbd className="hidden sm:inline-block ml-2 px-1.5 py-0.5 text-xs bg-[var(--color-primary-dark)] text-white rounded">
@@ -336,7 +336,7 @@ function DashboardPage() {
       {/* Floating Action Button */}
       <button
         onClick={() => setShowAddModal(true)}
-        className="lg:hidden fixed bottom-20 right-6 z-40 w-14 h-14 rounded-full bg-[var(--color-primary)] text-slate-900 shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
+        className="lg:hidden fixed bottom-20 right-6 z-40 w-14 h-14 rounded-full bg-[var(--color-primary)] text-white shadow-lg hover:shadow-xl transition-all flex items-center justify-center"
         aria-label="Add shift"
       >
         <Plus className="h-6 w-6" />

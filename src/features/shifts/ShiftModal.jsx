@@ -2,6 +2,15 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format } from 'date-fns';
+import {
+  Briefcase,
+  Calendar,
+  Clock3,
+  Coffee,
+  DollarSign,
+  ArrowRightLeft,
+  StickyNote,
+} from 'lucide-react';
 import { shiftSchema } from '../../lib/validation.js';
 import { calculateShiftValues, formatCurrency, formatHours } from '../../lib/calculations';
 import { combineDateAndTime, extractTimeString } from '../../lib/utils';
@@ -36,7 +45,7 @@ function ShiftModal({ isOpen, onClose, shift = null }) {
         shiftDate: format(new Date(), 'yyyy-MM-dd'),
         startTime: '09:00',
         endTime: '17:00',
-        breakMinutes: 0,
+        breakMinutes: 30,
         hourlyRateCAD: settings?.default_hourly_rate_cad || 15,
         conversionRatePHP: settings?.default_conversion_rate_php || 43,
         notes: '',
@@ -142,7 +151,12 @@ function ShiftModal({ isOpen, onClose, shift = null }) {
         {/* Workplace */}
         <div>
           <Input
-            label="Workplace Name"
+            label={
+              <span className="inline-flex items-center gap-2">
+                <Briefcase className="h-4 w-4 text-[var(--color-primary)]" />
+                Workplace Name
+              </span>
+            }
             placeholder="Enter workplace name"
             error={errors.workplaceName?.message}
             {...register('workplaceName')}
@@ -165,34 +179,57 @@ function ShiftModal({ isOpen, onClose, shift = null }) {
         </div>
 
         {/* Date and Times */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-4">
           <Input
-            label="Date"
+            label={
+              <span className="inline-flex items-center gap-2">
+                <Calendar className="h-4 w-4 text-[var(--color-primary)]" />
+                Date
+              </span>
+            }
             type="date"
             error={errors.shiftDate?.message}
             {...register('shiftDate')}
             onBlur={updateLiveCalc}
           />
-          <Input
-            label="Start Time"
-            type="time"
-            error={errors.startTime?.message}
-            {...register('startTime')}
-            onBlur={updateLiveCalc}
-          />
-          <Input
-            label="End Time"
-            type="time"
-            error={errors.endTime?.message}
-            {...register('endTime')}
-            onBlur={updateLiveCalc}
-          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label={
+                <span className="inline-flex items-center gap-2">
+                  <Clock3 className="h-4 w-4 text-[var(--color-primary)]" />
+                  Start Time
+                </span>
+              }
+              type="time"
+              error={errors.startTime?.message}
+              {...register('startTime')}
+              onBlur={updateLiveCalc}
+            />
+            <Input
+              label={
+                <span className="inline-flex items-center gap-2">
+                  <Clock3 className="h-4 w-4 text-[var(--color-primary)]" />
+                  End Time
+                </span>
+              }
+              type="time"
+              error={errors.endTime?.message}
+              {...register('endTime')}
+              onBlur={updateLiveCalc}
+            />
+          </div>
         </div>
 
         {/* Break and Rates */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="space-y-4">
           <Input
-            label="Break (minutes)"
+            label={
+              <span className="inline-flex items-center gap-2">
+                <Coffee className="h-4 w-4 text-[var(--color-primary)]" />
+                Break (minutes)
+              </span>
+            }
             type="number"
             min="0"
             step="1"
@@ -200,29 +237,47 @@ function ShiftModal({ isOpen, onClose, shift = null }) {
             {...register('breakMinutes')}
             onBlur={updateLiveCalc}
           />
-          <Input
-            label="Hourly Rate (CAD)"
-            type="number"
-            min="0"
-            step="0.01"
-            error={errors.hourlyRateCAD?.message}
-            {...register('hourlyRateCAD')}
-            onBlur={updateLiveCalc}
-          />
-          <Input
-            label="CAD → PHP Rate"
-            type="number"
-            min="0"
-            step="0.01"
-            error={errors.conversionRatePHP?.message}
-            {...register('conversionRatePHP')}
-            onBlur={updateLiveCalc}
-          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <Input
+              label={
+                <span className="inline-flex items-center gap-2">
+                  <DollarSign className="h-4 w-4 text-[var(--color-primary)]" />
+                  Hourly Rate (CAD)
+                </span>
+              }
+              type="number"
+              min="0"
+              step="0.01"
+              error={errors.hourlyRateCAD?.message}
+              {...register('hourlyRateCAD')}
+              onBlur={updateLiveCalc}
+            />
+            <Input
+              label={
+                <span className="inline-flex items-center gap-2">
+                  <ArrowRightLeft className="h-4 w-4 text-[var(--color-primary)]" />
+                  CAD → PHP Rate
+                </span>
+              }
+              type="number"
+              min="0"
+              step="0.01"
+              error={errors.conversionRatePHP?.message}
+              {...register('conversionRatePHP')}
+              onBlur={updateLiveCalc}
+            />
+          </div>
         </div>
 
         {/* Notes */}
         <Textarea
-          label="Notes (optional)"
+          label={
+            <span className="inline-flex items-center gap-2">
+              <StickyNote className="h-4 w-4 text-[var(--color-primary)]" />
+              Notes (optional)
+            </span>
+          }
           placeholder="Add any notes about this shift..."
           rows={2}
           error={errors.notes?.message}
