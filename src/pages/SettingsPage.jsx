@@ -1,9 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, X, Trash2, DollarSign, RefreshCw, Briefcase, Palette, Moon, Sun } from 'lucide-react';
+import { Plus, X, Trash2, DollarSign, RefreshCw, Briefcase, Palette, Moon, Sun, LogOut } from 'lucide-react';
 import { settingsSchema } from '../lib/validation.js';
 import { useTheme, themeColors } from '../features/auth/ThemeContext';
+import { useAuth } from '../features/auth';
 import {
   useSettings,
   useUpdateSettings,
@@ -25,6 +27,8 @@ import {
 import { Skeleton } from '../components/common';
 
 function SettingsPage() {
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
   const { data: settings, isLoading: settingsLoading } = useSettings();
   const { data: presets = [], isLoading: presetsLoading } = useWorkPresets();
   const { darkMode, setDarkModeEnabled, themeColor, changeThemeColor } = useTheme();
@@ -102,6 +106,15 @@ function SettingsPage() {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Failed to sign out:', error);
+    }
+  };
+
   if (settingsLoading || presetsLoading) {
     return (
       <div className="space-y-6">
@@ -121,15 +134,21 @@ function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-5 sm:space-y-6 max-w-3xl">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">
+      <div className="page-shell px-5 py-5 sm:px-6 sm:py-6">
+        <h1 className="page-header-title text-3xl font-bold text-slate-900 dark:text-slate-100">
           Settings
         </h1>
-        <p className="text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-slate-600 dark:text-slate-400 mt-1.5">
           Set your defaults and quick work presets
         </p>
+        <div className="mt-4">
+          <Button variant="outline" onClick={handleSignOut}>
+            <LogOut className="h-4 w-4 mr-2" />
+            Sign Out
+          </Button>
+        </div>
       </div>
 
       {/* Default Rates */}
@@ -282,7 +301,7 @@ function SettingsPage() {
               {presets.map((preset) => (
                 <div
                   key={preset.id}
-                  className="flex items-center justify-between px-4 py-3 bg-[var(--color-primary-light)] dark:bg-purple-900/20 rounded-xl"
+                  className="flex items-center justify-between px-4 py-3 bg-[var(--color-primary-light)] dark:bg-[var(--color-primary)]/15 rounded-xl"
                 >
                   <span className="text-gray-900 dark:text-gray-100">{preset.name}</span>
                   <button

@@ -1,14 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Theme CSS Variables */
 :root {
-  --color-primary: #9D7FB8;
-  --color-primary-dark: #8B6FA6;
-  --color-primary-light: #E8DFF5;
-  --color-accent: #9D7FB8;
-  --color-bg-light: #ECECEC;
-  --color-bg-card: #FFFFFF;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Manrope', 'Segoe UI', sans-serif;
+
+  --color-primary: #27b3a8;
+  --color-primary-dark: #1f8d85;
+  --color-primary-light: #e7f7f4;
+  --color-accent: #ff7a5c;
+  --color-accent-soft: #ffe7e1;
+
+  --color-bg-light: #f6f9f9;
+  --color-bg-card: #ffffff;
+  --color-surface-muted: #eef5f4;
+  --color-text: #1f2937;
+  --color-text-muted: #627081;
+
+  --shadow-soft: 0 8px 22px rgba(30, 41, 59, 0.06);
+  --shadow-raise: 0 14px 34px rgba(30, 41, 59, 0.1);
 }
 
 /* Custom utility classes */
@@ -36,12 +48,37 @@
     background-color: var(--color-accent);
   }
 
+  .bg-theme-accent-soft {
+    background-color: var(--color-accent-soft);
+  }
+
   .text-theme-accent {
     color: var(--color-accent);
   }
 
   .border-theme-primary {
     border-color: var(--color-primary);
+  }
+
+  .page-shell {
+    @apply rounded-2xl sm:rounded-3xl border border-white/80 dark:border-slate-700/70;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(248, 252, 252, 0.96) 100%);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .dark .page-shell {
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.96) 0%, rgba(15, 23, 42, 0.95) 100%);
+  }
+
+  .page-header-title {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  .surface-card {
+    @apply rounded-2xl border border-slate-200/90 dark:border-slate-700/80;
+    background-color: var(--color-bg-card);
+    box-shadow: var(--shadow-soft);
   }
 }
 
@@ -53,14 +90,21 @@
   
   body {
     @apply antialiased;
-    background-color: #ECECEC;
-    color: #2D3748;
+    font-family: var(--font-body);
+    color: var(--color-text);
     margin: 0;
+    background:
+      radial-gradient(900px 600px at 90% -20%, rgba(39, 179, 168, 0.16), transparent 60%),
+      radial-gradient(700px 500px at -10% 0%, rgba(255, 122, 92, 0.14), transparent 58%),
+      var(--color-bg-light);
   }
 
   html.dark body {
-    background-color: #1a1a1a;
-    color: #E5E7EB;
+    color: #e5e7eb;
+    background:
+      radial-gradient(800px 560px at 92% -25%, rgba(31, 141, 133, 0.25), transparent 62%),
+      radial-gradient(640px 460px at -8% -5%, rgba(255, 122, 92, 0.18), transparent 56%),
+      #0f172a;
   }
   
   #root {
@@ -71,5 +115,10 @@
   *:focus-visible {
     @apply outline-none ring-2 ring-offset-2 dark:ring-offset-gray-900;
     ring-color: var(--color-accent);
+  }
+
+  ::selection {
+    background: var(--color-primary-light);
+    color: var(--color-primary-dark);
   }
 }

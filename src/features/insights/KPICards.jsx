@@ -18,12 +18,12 @@ function KPICard({ type, value, label, isLoading }) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 px-4 py-3.5 shadow-sm">
-      <div className="h-1.5 w-10 rounded-full bg-[var(--color-primary-light)] mb-2" />
-      <p className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-400 mb-1">
+    <div className="page-shell px-4 py-4 sm:px-5 sm:py-5">
+      <div className="h-1.5 w-12 rounded-full bg-[var(--color-primary)]/60 mb-2.5" />
+      <p className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1.5 uppercase tracking-wide">
         {label}
       </p>
-      <p className="text-2xl sm:text-[1.75rem] leading-tight font-bold text-gray-900 dark:text-gray-100">
+      <p className="text-2xl sm:text-[1.9rem] leading-tight font-extrabold text-slate-900 dark:text-slate-100">
         {formatValue()}
       </p>
     </div>

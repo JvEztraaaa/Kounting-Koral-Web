@@ -3,31 +3,49 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const ThemeContext = createContext();
 
 export const themeColors = {
-  purple: {
-    name: 'Pastel Purple',
-    primary: '#9D7FB8',
-    primaryDark: '#8B6FA6',
-    primaryLight: '#E8DFF5',
-    accent: '#9D7FB8',
-    bgLight: '#ECECEC',
+  lagoon: {
+    name: 'Lagoon Teal',
+    primary: '#27B3A8',
+    primaryDark: '#1F8D85',
+    primaryLight: '#E7F7F4',
+    accent: '#FF7A5C',
+    bgLight: '#F6F9F9',
+    bgCard: '#FFFFFF',
+  },
+  sunrise: {
+    name: 'Sunrise Coral',
+    primary: '#FF8A65',
+    primaryDark: '#E26745',
+    primaryLight: '#FFF1EB',
+    accent: '#1AAFA0',
+    bgLight: '#F9F7F4',
+    bgCard: '#FFFFFF',
+  },
+  tide: {
+    name: 'Tide Blue',
+    primary: '#4C8FD8',
+    primaryDark: '#3A74B4',
+    primaryLight: '#EAF2FD',
+    accent: '#2BAE9C',
+    bgLight: '#F5F8FC',
     bgCard: '#FFFFFF',
   },
   pink: {
     name: 'Pastel Pink',
-    primary: '#F5A7C8',
-    primaryDark: '#E395B6',
-    primaryLight: '#FCE8F0',
-    accent: '#F5A7C8',
-    bgLight: '#ECECEC',
+    primary: '#F39AC1',
+    primaryDark: '#DB7FA8',
+    primaryLight: '#FDEBF4',
+    accent: '#8E7CD6',
+    bgLight: '#FCF8FB',
     bgCard: '#FFFFFF',
   },
-  green: {
-    name: 'Pastel Green',
-    primary: '#A8D5BA',
-    primaryDark: '#96C3A8',
-    primaryLight: '#E8F5ED',
-    accent: '#A8D5BA',
-    bgLight: '#ECECEC',
+  purple: {
+    name: 'Pastel Purple',
+    primary: '#B69AE8',
+    primaryDark: '#9B82CC',
+    primaryLight: '#F2EDFD',
+    accent: '#F6A9C5',
+    bgLight: '#F8F7FC',
     bgCard: '#FFFFFF',
   },
 };
@@ -46,10 +64,10 @@ export function ThemeProvider({ children }) {
 
   const [themeColor, setThemeColor] = useState(() => {
     if (typeof window !== 'undefined') {
-      const storedTheme = localStorage.getItem('themeColor') || 'purple';
-      return themeColors[storedTheme] ? storedTheme : 'purple';
+      const storedTheme = localStorage.getItem('themeColor') || 'lagoon';
+      return themeColors[storedTheme] ? storedTheme : 'lagoon';
     }
-    return 'purple';
+    return 'lagoon';
   });
 
   useEffect(() => {
@@ -67,18 +85,19 @@ export function ThemeProvider({ children }) {
   }, [darkMode]);
 
   useEffect(() => {
-    const colors = themeColors[themeColor] || themeColors.purple;
+    const colors = themeColors[themeColor] || themeColors.lagoon;
     const root = document.documentElement;
+    const cardBg = darkMode ? '#111C2D' : colors.bgCard;
     
     root.style.setProperty('--color-primary', colors.primary);
     root.style.setProperty('--color-primary-dark', colors.primaryDark);
     root.style.setProperty('--color-primary-light', colors.primaryLight);
     root.style.setProperty('--color-accent', colors.accent);
     root.style.setProperty('--color-bg-light', colors.bgLight);
-    root.style.setProperty('--color-bg-card', colors.bgCard);
+    root.style.setProperty('--color-bg-card', cardBg);
     
     localStorage.setItem('themeColor', themeColor);
-  }, [themeColor]);
+  }, [themeColor, darkMode]);
 
   const toggleDarkMode = () => {
     setDarkMode(prev => !prev);

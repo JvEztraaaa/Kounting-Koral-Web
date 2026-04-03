@@ -55,8 +55,8 @@ function EarningsTrendChart({ shifts, days = 30 }) {
   }, [shifts, days]);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+    <div className="surface-card p-4 sm:p-5">
+      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
         Earnings Trend (Last {days} Days)
       </h3>
       <div className="h-64">
@@ -128,11 +128,11 @@ function WorkplaceBreakdownChart({ shifts }) {
 
   if (data.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className="surface-card p-4 sm:p-5">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
           Earnings by Workplace
         </h3>
-        <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
+        <div className="h-64 flex items-center justify-center text-slate-500 dark:text-slate-400">
           No data available
         </div>
       </div>
@@ -140,8 +140,8 @@ function WorkplaceBreakdownChart({ shifts }) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+    <div className="surface-card p-4 sm:p-5">
+      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
         Earnings by Workplace
       </h3>
       <div className="h-64">
@@ -181,10 +181,10 @@ function WorkplaceBreakdownChart({ shifts }) {
               className="w-3 h-3 rounded-full shrink-0"
               style={{ backgroundColor: pieColors[index % pieColors.length] }}
             />
-            <span className="text-gray-600 dark:text-gray-300 truncate">
+            <span className="text-slate-600 dark:text-slate-300 truncate">
               {item.name}
             </span>
-            <span className="text-gray-900 dark:text-gray-100 font-medium ml-auto">
+            <span className="text-slate-900 dark:text-slate-100 font-medium ml-auto">
               {formatCurrency(item.earnings, 'CAD')}
             </span>
           </div>
@@ -230,11 +230,11 @@ function MonthlyComparisonChart({ shifts }) {
 
   if (data.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <div className="surface-card p-4 sm:p-5">
+        <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
           Monthly Comparison
         </h3>
-        <div className="h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
+        <div className="h-64 flex items-center justify-center text-slate-500 dark:text-slate-400">
           No data available
         </div>
       </div>
@@ -242,8 +242,8 @@ function MonthlyComparisonChart({ shifts }) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+    <div className="surface-card p-4 sm:p-5">
+      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100 mb-4">
         Monthly Comparison
       </h3>
       <div className="h-64">

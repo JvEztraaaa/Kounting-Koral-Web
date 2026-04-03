@@ -33,7 +33,7 @@ function ShiftList({ shifts, isLoading, viewMode, onEditShift }) {
   const groupedShifts = groupShiftsByMonth(shifts);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 sm:space-y-6">
       {groupedShifts.map((group) => {
         const isCollapsed = collapsedMonths.has(group.key);
         const monthTotals = calculateSummaryTotals(group.shifts);
@@ -43,7 +43,7 @@ function ShiftList({ shifts, isLoading, viewMode, onEditShift }) {
             {/* Month header */}
             <button
               onClick={() => toggleMonth(group.key)}
-              className="w-full flex items-center justify-between p-3 bg-[var(--color-primary-light)] dark:bg-[var(--color-primary)]/15 rounded-lg hover:brightness-95 transition-colors mb-3"
+              className="w-full flex items-center justify-between px-4 py-3.5 bg-[var(--color-primary-light)] dark:bg-[var(--color-primary)]/15 rounded-xl hover:brightness-95 transition-colors mb-3"
             >
               <div className="flex items-center gap-2">
                 {isCollapsed ? (
@@ -51,10 +51,10 @@ function ShiftList({ shifts, isLoading, viewMode, onEditShift }) {
                 ) : (
                   <ChevronDown className="h-5 w-5 text-[var(--color-primary-dark)]" />
                 )}
-                <span className="font-semibold text-gray-900 dark:text-gray-100">
+                <span className="font-semibold text-slate-900 dark:text-slate-100">
                   {group.label}
                 </span>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-slate-500 dark:text-slate-400">
                   ({group.shifts.length} shift{group.shifts.length !== 1 ? 's' : ''})
                 </span>
               </div>
@@ -68,7 +68,7 @@ function ShiftList({ shifts, isLoading, viewMode, onEditShift }) {
               <div
                 className={cn(
                   viewMode === 'grid'
-                    ? 'grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4'
+                    ? 'grid grid-cols-2 gap-3'
                     : 'space-y-4'
                 )}
               >

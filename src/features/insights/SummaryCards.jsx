@@ -33,20 +33,20 @@ function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl border-2 border-[var(--color-primary)] overflow-hidden shadow-sm">
+    <div className="surface-card overflow-hidden">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full p-4 sm:p-5 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+        className="w-full p-4 sm:p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors"
       >
         <div className="flex justify-between items-start">
           <div>
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 sm:h-5 sm:w-5 text-[var(--color-primary)]" />
-              <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-gray-100">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">
                 {title}
               </h3>
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
               {dateRange}
             </p>
           </div>
@@ -57,29 +57,29 @@ function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
           )}
         </div>
 
-        <div className="bg-gray-50 dark:bg-gray-700/30 rounded-lg sm:rounded-xl p-3 sm:p-4 mt-3 sm:mt-4">
+        <div className="bg-slate-50 dark:bg-slate-700/25 rounded-xl p-3 sm:p-4 mt-3 sm:mt-4">
           <div className="grid grid-cols-3 gap-2 sm:gap-4">
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
+              <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 leading-tight">
                 {totals.shiftCount}
               </p>
-              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">Shifts</p>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Shifts</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100 leading-tight">
+              <p className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-100 leading-tight">
                 {formatHours(totals.totalHours)}
               </p>
-              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">Hours</p>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">Hours</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400 leading-tight">
+              <p className="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400 leading-tight">
                 {formatCurrency(totals.totalCAD, 'CAD')}
               </p>
-              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">CAD</p>
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">CAD</p>
             </div>
           </div>
-          <div className="mt-2.5 pt-2.5 border-t border-gray-200 dark:border-gray-600 text-right">
-            <p className="text-base sm:text-lg font-bold text-[var(--color-primary-dark)] dark:text-[var(--color-primary)]">
+          <div className="mt-2.5 pt-2.5 border-t border-slate-200 dark:border-slate-600 text-right">
+            <p className="text-sm sm:text-base font-bold text-[var(--color-primary-dark)] dark:text-[var(--color-primary)]">
               PHP total: {formatCurrency(totals.totalPHP, 'PHP')}
             </p>
           </div>
@@ -88,21 +88,21 @@ function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
 
       {/* Expanded shift list */}
       {isExpanded && shifts.length > 0 && (
-        <div className="border-t border-gray-200 dark:border-gray-700 px-4 sm:px-5 py-4 bg-gray-50 dark:bg-gray-900/50">
-          <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+        <div className="border-t border-slate-200 dark:border-slate-700 px-4 sm:px-5 py-4 bg-slate-50 dark:bg-slate-900/40">
+          <p className="text-sm font-medium text-slate-700 dark:text-slate-300 mb-3">
             Included Shifts
           </p>
           <div className="space-y-2">
             {shifts.map((shift) => (
               <div
                 key={shift.id}
-                className="flex justify-between items-center py-2 px-3 bg-white dark:bg-gray-800 rounded-lg text-sm"
+                className="flex justify-between items-center py-2 px-3 bg-white dark:bg-slate-800 rounded-lg text-sm"
               >
                 <div>
-                  <span className="font-medium text-gray-900 dark:text-gray-100">
+                  <span className="font-medium text-slate-900 dark:text-slate-100">
                     {shift.workplace_name}
                   </span>
-                  <span className="text-gray-500 dark:text-gray-400 ml-2">
+                  <span className="text-slate-500 dark:text-slate-400 ml-2">
                     {formatDate(shift.shift_date)}
                   </span>
                 </div>
@@ -121,8 +121,8 @@ function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
       )}
 
       {isExpanded && shifts.length === 0 && (
-        <div className="border-t border-gray-200 dark:border-gray-700 px-5 py-8 text-center">
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+        <div className="border-t border-slate-200 dark:border-slate-700 px-5 py-8 text-center">
+          <p className="text-sm text-slate-500 dark:text-slate-400">
             No shifts recorded in this period
           </p>
         </div>

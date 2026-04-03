@@ -15,23 +15,23 @@ const Button = forwardRef(
     ref
   ) => {
     const baseStyles =
-      'inline-flex items-center justify-center font-medium rounded-xl transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+      'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
     const variants = {
       primary:
-        'bg-[var(--color-accent)] text-slate-900 hover:bg-[var(--color-primary-dark)] hover:text-slate-950 shadow-sm hover:shadow-md focus:ring-[var(--color-primary)]',
+        'bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary-dark)] shadow-sm hover:shadow-md focus:ring-[var(--color-primary)]',
       secondary:
-        'bg-gray-100 text-gray-900 hover:bg-gray-200 focus:ring-gray-500 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 shadow-sm',
+        'bg-slate-100 text-slate-800 hover:bg-slate-200 focus:ring-slate-400 dark:bg-slate-700 dark:text-slate-100 dark:hover:bg-slate-600 shadow-sm',
       outline:
-        'border-2 border-gray-200 bg-transparent text-gray-700 hover:bg-gray-50 hover:border-gray-300 focus:ring-[var(--color-primary)] dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800',
+        'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-400 focus:ring-[var(--color-primary)] dark:bg-slate-900/60 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800',
       ghost:
-        'bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-500 dark:text-gray-200 dark:hover:bg-gray-800',
+        'bg-transparent text-slate-700 hover:bg-slate-100 focus:ring-slate-400 dark:text-slate-200 dark:hover:bg-slate-800',
       danger:
         'bg-red-500 text-white hover:bg-red-600 shadow-sm hover:shadow-md focus:ring-red-400',
     };
 
     const sizes = {
-      sm: 'px-3 py-1.5 text-sm',
+      sm: 'px-3 py-2 text-sm',
       md: 'px-4 py-2.5 text-sm',
       lg: 'px-6 py-3 text-base',
       icon: 'p-2',

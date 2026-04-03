@@ -4,7 +4,7 @@ function Card({ className, children, ...props }) {
   return (
     <div
       className={cn(
-        'bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow border border-gray-100 dark:border-gray-700',
+        'surface-card overflow-hidden transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-raise)] dark:bg-slate-800/95',
         className
       )}
       {...props}
@@ -17,7 +17,7 @@ function Card({ className, children, ...props }) {
 function CardHeader({ className, children, ...props }) {
   return (
     <div
-      className={cn('px-6 py-4 border-b border-gray-200 dark:border-gray-700', className)}
+      className={cn('px-5 sm:px-6 py-4 border-b border-slate-200/90 dark:border-slate-700/80', className)}
       {...props}
     >
       {children}
@@ -28,7 +28,7 @@ function CardHeader({ className, children, ...props }) {
 function CardTitle({ className, children, ...props }) {
   return (
     <h3
-      className={cn('text-lg font-semibold text-gray-900 dark:text-gray-100', className)}
+      className={cn('text-lg font-bold tracking-tight text-slate-900 dark:text-slate-100', className)}
       {...props}
     >
       {children}
@@ -39,7 +39,7 @@ function CardTitle({ className, children, ...props }) {
 function CardDescription({ className, children, ...props }) {
   return (
     <p
-      className={cn('text-sm text-gray-500 dark:text-gray-400 mt-1', className)}
+      className={cn('text-sm text-slate-500 dark:text-slate-400 mt-1', className)}
       {...props}
     >
       {children}
@@ -49,7 +49,7 @@ function CardDescription({ className, children, ...props }) {
 
 function CardContent({ className, children, ...props }) {
   return (
-    <div className={cn('px-6 py-4', className)} {...props}>
+    <div className={cn('px-5 sm:px-6 py-4 sm:py-5', className)} {...props}>
       {children}
     </div>
   );
@@ -59,7 +59,7 @@ function CardFooter({ className, children, ...props }) {
   return (
     <div
       className={cn(
-        'px-6 py-4 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 rounded-b-xl',
+        'px-5 sm:px-6 py-4 border-t border-slate-200/90 dark:border-slate-700/80 bg-slate-50/70 dark:bg-slate-800/60',
         className
       )}
       {...props}

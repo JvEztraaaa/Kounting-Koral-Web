@@ -37,7 +37,7 @@ function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+      <div className="min-h-screen flex items-center justify-center px-4 py-8 sm:py-10">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <div className="mb-4">
@@ -61,8 +61,13 @@ function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center px-4 py-8 sm:py-10">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-4">
+          <p className="page-header-title text-3xl text-slate-900 dark:text-slate-100">Kounting Koral</p>
+          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Get set up in less than a minute</p>
+        </div>
+        <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="mb-4">
             <span className="text-3xl">🐚</span>
@@ -114,13 +119,14 @@ function SignupPage() {
             Already have an account?{' '}
             <Link
               to="/login"
-              className="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-medium"
+              className="text-[var(--color-primary-dark)] hover:text-[var(--color-primary)] font-semibold"
             >
               Sign in
             </Link>
           </p>
         </CardContent>
-      </Card>
+        </Card>
+      </div>
     </div>
   );
 }

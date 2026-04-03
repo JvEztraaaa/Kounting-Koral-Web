@@ -22,17 +22,17 @@ function InsightsPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-gray-100">
+      <div className="page-shell px-5 py-5 sm:px-6 sm:py-6">
+        <h1 className="page-header-title text-2xl sm:text-3xl font-bold text-slate-900 dark:text-slate-100">
           Insights
         </h1>
-        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 mt-1">
+        <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-1.5">
           Tap a card to see its included shifts
         </p>
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-5">
         <WeeklySummary shifts={shifts} isLoading={isLoading} />
         <MonthlySummary shifts={shifts} isLoading={isLoading} />
         <YearlySummary shifts={shifts} isLoading={isLoading} />
