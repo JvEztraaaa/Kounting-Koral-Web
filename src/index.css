@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Theme CSS Variables */
+:root {
+  --color-primary: #9D7FB8;
+  --color-primary-dark: #8B6FA6;
+  --color-primary-light: #E8DFF5;
+  --color-accent: #9D7FB8;
+  --color-bg-light: #ECECEC;
+  --color-bg-card: #FFFFFF;
+}
+
+/* Custom utility classes */
+@layer utilities {
+  .animate-in {
+    animation: animate-in 0.2s ease-out;
+  }
+  
+  @keyframes animate-in {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .bg-theme-primary {
+    background-color: var(--color-primary);
+  }
+
+  .bg-theme-accent {
+    background-color: var(--color-accent);
+  }
+
+  .text-theme-accent {
+    color: var(--color-accent);
+  }
+
+  .border-theme-primary {
+    border-color: var(--color-primary);
+  }
+}
+
+/* Base styles */
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  
+  body {
+    @apply antialiased;
+    background-color: #ECECEC;
+    color: #2D3748;
+    margin: 0;
+  }
+
+  html.dark body {
+    background-color: #1a1a1a;
+    color: #E5E7EB;
+  }
+  
+  #root {
+    min-height: 100vh;
+  }
+  
+  /* Focus visible styles - use theme color */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-offset-2 dark:ring-offset-gray-900;
+    ring-color: var(--color-accent);
+  }
+}
