@@ -32,7 +32,10 @@ function ShiftModal({ isOpen, onClose, shift = null }) {
   const defaultValues = shift
     ? {
         workplaceName: shift.workplace_name,
-        shiftDate: format(new Date(shift.shift_date), 'yyyy-MM-dd'),
+        shiftDate:
+          typeof shift.shift_date === 'string'
+            ? shift.shift_date.slice(0, 10)
+            : format(shift.shift_date, 'yyyy-MM-dd'),
         startTime: extractTimeString(shift.start_time),
         endTime: extractTimeString(shift.end_time),
         breakMinutes: shift.break_minutes,
@@ -109,7 +112,7 @@ function ShiftModal({ isOpen, onClose, shift = null }) {
 
       const shiftData = {
         workplace_name: data.workplaceName,
-        shift_date: format(new Date(data.shiftDate), 'yyyy-MM-dd'),
+        shift_date: data.shiftDate,
         start_time: startDateTime.toISOString(),
         end_time: endDateTime.toISOString(),
         break_minutes: data.breakMinutes,
@@ -193,7 +196,7 @@ function ShiftModal({ isOpen, onClose, shift = null }) {
             onBlur={updateLiveCalc}
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label={
                 <span className="inline-flex items-center gap-2">
@@ -238,7 +241,7 @@ function ShiftModal({ isOpen, onClose, shift = null }) {
             onBlur={updateLiveCalc}
           />
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
               label={
                 <span className="inline-flex items-center gap-2">

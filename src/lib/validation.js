@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { parseISO } from 'date-fns';
 import { calculateOriginalHours, calculateBreakHours } from './calculations.js';
 
 /**
@@ -10,10 +11,10 @@ export const shiftSchema = z
       .string()
       .min(1, 'Workplace name is required')
       .transform((val) => val.trim()),
-    shiftDate: z.coerce.date({
-      required_error: 'Shift date is required',
-      invalid_type_error: 'Invalid date',
-    }),
+    shiftDate: z
+      .string()
+      .min(1, 'Shift date is required')
+      .refine((value) => /^\d{4}-\d{2}-\d{2}$/.test(value), 'Invalid date'),
     startTime: z.string().min(1, 'Start time is required'),
     endTime: z.string().min(1, 'End time is required'),
     breakMinutes: z.coerce
@@ -34,10 +35,10 @@ export const shiftSchema = z
       const [startHour, startMin] = data.startTime.split(':').map(Number);
       const [endHour, endMin] = data.endTime.split(':').map(Number);
 
-      const startDate = new Date(data.shiftDate);
+      const startDate = parseISO(data.shiftDate);
       startDate.setHours(startHour, startMin, 0, 0);
 
-      const endDate = new Date(data.shiftDate);
+      const endDate = parseISO(data.shiftDate);
       endDate.setHours(endHour, endMin, 0, 0);
 
       // Calculate hours (handles overnight)
