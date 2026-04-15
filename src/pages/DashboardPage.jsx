@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import {
   Plus,
   LayoutGrid,
@@ -6,6 +6,8 @@ import {
   Table,
   Download,
   Filter,
+  ChevronDown,
+  Check,
   X,
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -26,6 +28,8 @@ function DashboardPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedWorkplace, setSelectedWorkplace] = useState('all');
+  const [isWorkplaceMenuOpen, setIsWorkplaceMenuOpen] = useState(false);
+  const workplaceMenuRef = useRef(null);
 
   const appTitle = settings?.app_title || 'Kounting Koral';
 
@@ -54,6 +58,8 @@ function DashboardPage() {
   }, [shifts, selectedDate, selectedWorkplace]);
 
   const hasActiveFilters = !!selectedDate || selectedWorkplace !== 'all';
+  const selectedWorkplaceLabel =
+    selectedWorkplace === 'all' ? 'All workplaces' : selectedWorkplace;
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -75,6 +81,30 @@ function DashboardPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  useEffect(() => {
+    const handleOutsidePress = (event) => {
+      if (!workplaceMenuRef.current) return;
+
+      if (!workplaceMenuRef.current.contains(event.target)) {
+        setIsWorkplaceMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsidePress);
+    document.addEventListener('touchstart', handleOutsidePress);
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutsidePress);
+      document.removeEventListener('touchstart', handleOutsidePress);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!showFilters) {
+      setIsWorkplaceMenuOpen(false);
+    }
+  }, [showFilters]);
+
   const totals = calculateSummaryTotals(filteredShifts);
 
   const handleEditShift = (shift) => {
@@ -90,6 +120,12 @@ function DashboardPage() {
   const clearFilters = () => {
     setSelectedDate('');
     setSelectedWorkplace('all');
+    setIsWorkplaceMenuOpen(false);
+  };
+
+  const handleSelectWorkplace = (value) => {
+    setSelectedWorkplace(value);
+    setIsWorkplaceMenuOpen(false);
   };
 
   const exportToCSV = () => {
@@ -242,18 +278,88 @@ function DashboardPage() {
                 <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">
                   Filter by workplace
                 </label>
-                <select
-                  value={selectedWorkplace}
-                  onChange={(event) => setSelectedWorkplace(event.target.value)}
-                  className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20"
-                >
-                  <option value="all">All workplaces</option>
-                  {workplaceOptions.map((name) => (
-                    <option key={name} value={name}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
+                <div className="relative" ref={workplaceMenuRef}>
+                  <button
+                    type="button"
+                    className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20 flex items-center justify-between gap-2"
+                    onClick={() => setIsWorkplaceMenuOpen((prev) => !prev)}
+                    aria-expanded={isWorkplaceMenuOpen}
+                    aria-haspopup="listbox"
+                    aria-label="Select workplace filter"
+                  >
+                    <span className="truncate text-left">{selectedWorkplaceLabel}</span>
+                    <ChevronDown
+                      className={cn(
+                        'h-4 w-4 shrink-0 text-slate-500 transition-transform',
+                        isWorkplaceMenuOpen && 'rotate-180'
+                      )}
+                    />
+                  </button>
+
+                  {isWorkplaceMenuOpen && (
+                    <>
+                      <button
+                        type="button"
+                        className="fixed inset-0 z-20 bg-black/30 sm:hidden"
+                        aria-label="Close workplace dropdown"
+                        onClick={() => setIsWorkplaceMenuOpen(false)}
+                      />
+
+                      <div className="fixed inset-x-3 bottom-4 z-30 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 shadow-2xl sm:absolute sm:inset-x-0 sm:top-[calc(100%+0.5rem)] sm:bottom-auto sm:z-20 sm:shadow-xl">
+                        <div className="sm:hidden px-4 py-3 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+                          <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
+                            Select workplace
+                          </p>
+                          <button
+                            type="button"
+                            className="h-8 w-8 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center"
+                            onClick={() => setIsWorkplaceMenuOpen(false)}
+                            aria-label="Close"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+
+                        <div className="max-h-64 overflow-y-auto p-2" role="listbox" aria-label="Workplace options">
+                          <button
+                            type="button"
+                            role="option"
+                            aria-selected={selectedWorkplace === 'all'}
+                            className={cn(
+                              'w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-sm text-left transition-colors',
+                              selectedWorkplace === 'all'
+                                ? 'bg-[var(--color-primary-light)] text-[var(--color-primary-dark)] dark:bg-[var(--color-primary)]/20 dark:text-[var(--color-primary-light)] font-semibold'
+                                : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                            )}
+                            onClick={() => handleSelectWorkplace('all')}
+                          >
+                            <span className="truncate">All workplaces</span>
+                            {selectedWorkplace === 'all' && <Check className="h-4 w-4 shrink-0" />}
+                          </button>
+
+                          {workplaceOptions.map((name) => (
+                            <button
+                              key={name}
+                              type="button"
+                              role="option"
+                              aria-selected={selectedWorkplace === name}
+                              className={cn(
+                                'w-full flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 text-sm text-left transition-colors',
+                                selectedWorkplace === name
+                                  ? 'bg-[var(--color-primary-light)] text-[var(--color-primary-dark)] dark:bg-[var(--color-primary)]/20 dark:text-[var(--color-primary-light)] font-semibold'
+                                  : 'text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800'
+                              )}
+                              onClick={() => handleSelectWorkplace(name)}
+                            >
+                              <span className="truncate">{name}</span>
+                              {selectedWorkplace === name && <Check className="h-4 w-4 shrink-0" />}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
 
