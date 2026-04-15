@@ -8,8 +8,8 @@
 -- SELECT id FROM auth.users WHERE email = 'your-email@example.com';
 
 -- Example: Insert sample user settings
--- INSERT INTO public.user_settings (user_id, default_hourly_rate_cad, default_conversion_rate_php)
--- VALUES ('YOUR_USER_ID', 18.50, 42.75);
+-- INSERT INTO public.user_settings (user_id, app_title, default_hourly_rate_cad, default_conversion_rate_php)
+-- VALUES ('YOUR_USER_ID', 'Kounting Koral', 18.50, 42.75);
 
 -- Example: Insert sample work presets
 -- INSERT INTO public.work_presets (user_id, name) VALUES
@@ -101,6 +101,7 @@ async function seedDatabase(userId) {
   // Insert settings
   await supabase.from('user_settings').insert({
     user_id: userId,
+    app_title: 'Kounting Koral',
     default_hourly_rate_cad: 18.50,
     default_conversion_rate_php: 42.75,
   });
@@ -134,6 +135,25 @@ async function seedDatabase(userId) {
   ];
 
   await supabase.from('work_logs').insert(shifts);
+
+  // Insert sample notes
+  await supabase.from('user_notes').insert([
+    {
+      user_id: userId,
+      note_type: 'text',
+      title: 'Payroll Reminder',
+      body: 'Double-check last Sunday night shift payout.',
+    },
+    {
+      user_id: userId,
+      note_type: 'list',
+      title: 'Before next shift',
+      checklist_items: [
+        { id: 'item-1', text: 'Bring water bottle', checked: false },
+        { id: 'item-2', text: 'Confirm schedule with manager', checked: true },
+      ],
+    },
+  ]);
   
   console.log('Database seeded successfully!');
 }

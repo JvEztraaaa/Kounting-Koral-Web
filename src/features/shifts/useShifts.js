@@ -2,13 +2,14 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../auth';
 
-const SHIFTS_KEY = ['shifts'];
+const getShiftsKey = (userId) => ['shifts', userId || 'anonymous'];
 
 export function useShifts() {
   const { user } = useAuth();
+  const shiftsKey = getShiftsKey(user?.id);
 
   return useQuery({
-    queryKey: SHIFTS_KEY,
+    queryKey: shiftsKey,
     queryFn: async () => {
       if (!user) return [];
 
@@ -28,9 +29,10 @@ export function useShifts() {
 
 export function useShift(id) {
   const { user } = useAuth();
+  const shiftsKey = getShiftsKey(user?.id);
 
   return useQuery({
-    queryKey: [...SHIFTS_KEY, id],
+    queryKey: [...shiftsKey, id],
     queryFn: async () => {
       if (!user || !id) return null;
 
@@ -51,6 +53,7 @@ export function useShift(id) {
 export function useCreateShift() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const shiftsKey = getShiftsKey(user?.id);
 
   return useMutation({
     mutationFn: async (shiftData) => {
@@ -66,7 +69,7 @@ export function useCreateShift() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: SHIFTS_KEY });
+      queryClient.invalidateQueries({ queryKey: shiftsKey });
     },
   });
 }
@@ -74,6 +77,7 @@ export function useCreateShift() {
 export function useUpdateShift() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const shiftsKey = getShiftsKey(user?.id);
 
   return useMutation({
     mutationFn: async ({ id, ...shiftData }) => {
@@ -91,8 +95,8 @@ export function useUpdateShift() {
       return data;
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: SHIFTS_KEY });
-      queryClient.invalidateQueries({ queryKey: [...SHIFTS_KEY, data.id] });
+      queryClient.invalidateQueries({ queryKey: shiftsKey });
+      queryClient.invalidateQueries({ queryKey: [...shiftsKey, data.id] });
     },
   });
 }
@@ -100,6 +104,7 @@ export function useUpdateShift() {
 export function useDeleteShift() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const shiftsKey = getShiftsKey(user?.id);
 
   return useMutation({
     mutationFn: async (id) => {
@@ -115,7 +120,7 @@ export function useDeleteShift() {
       return id;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: SHIFTS_KEY });
+      queryClient.invalidateQueries({ queryKey: shiftsKey });
     },
   });
 }

@@ -2,6 +2,7 @@ import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   BarChart3,
+  NotebookText,
   Activity,
   Settings,
   LogOut,
@@ -10,11 +11,13 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../features/auth';
 import { useTheme } from '../../features/auth/ThemeContext';
+import { useSettings } from '../../features/settings';
 import { cn } from '../../lib/utils';
 
 const navigation = [
   { name: 'Home', href: '/', icon: LayoutDashboard },
   { name: 'Insights', href: '/insights', icon: BarChart3 },
+  { name: 'Notes', href: '/notes', icon: NotebookText },
   { name: 'Stats', href: '/stats', icon: Activity },
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
@@ -22,7 +25,9 @@ const navigation = [
 function AppLayout() {
   const { user, signOut } = useAuth();
   const { darkMode, toggleDarkMode } = useTheme();
+  const { data: settings } = useSettings();
   const navigate = useNavigate();
+  const appTitle = settings?.app_title || 'Kounting Koral';
 
   const handleSignOut = async () => {
     try {
@@ -48,7 +53,7 @@ function AppLayout() {
               </div>
               <div>
                 <p className="text-base font-extrabold tracking-tight text-slate-900 dark:text-slate-100">
-                  Kounting Koral
+                  {appTitle}
                 </p>
                 <p className="text-xs text-slate-500 dark:text-slate-400">
                   Calm shift tracking
@@ -126,7 +131,7 @@ function AppLayout() {
 
         {/* Bottom Navigation - Mobile only */}
         <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-slate-900/95 border-t border-slate-200/80 dark:border-slate-700/70 backdrop-blur-xl lg:hidden">
-          <div className="grid grid-cols-4 h-16">
+          <div className="grid h-16" style={{ gridTemplateColumns: `repeat(${navigation.length}, minmax(0, 1fr))` }}>
             {navigation.map((item) => (
               <NavLink
                 key={item.name}

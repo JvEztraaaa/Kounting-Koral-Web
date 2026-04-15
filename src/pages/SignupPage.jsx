@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signupSchema } from '../lib/validation.js';
@@ -7,7 +7,6 @@ import { useAuth } from '../features/auth';
 import { Button, Input, Card, CardHeader, CardTitle, CardDescription, CardContent } from '../components/ui';
 
 function SignupPage() {
-  const navigate = useNavigate();
   const { signUp } = useAuth();
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);

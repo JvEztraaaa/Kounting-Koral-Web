@@ -59,6 +59,11 @@ export const shiftSchema = z
  * Zod schema for user settings validation
  */
 export const settingsSchema = z.object({
+  appTitle: z
+    .string()
+    .min(2, 'App title must be at least 2 characters')
+    .max(60, 'App title must be 60 characters or less')
+    .transform((val) => val.trim()),
   defaultHourlyRateCAD: z.coerce
     .number()
     .positive('Default hourly rate must be greater than 0')

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, X, Trash2, DollarSign, RefreshCw, Briefcase, Palette, Moon, Sun, LogOut } from 'lucide-react';
+import { Plus, X, Trash2, DollarSign, RefreshCw, Briefcase, Palette, Moon, Sun, LogOut, Type } from 'lucide-react';
 import { settingsSchema } from '../lib/validation.js';
 import { useTheme, themeColors } from '../features/auth/ThemeContext';
 import { useAuth } from '../features/auth';
@@ -49,11 +49,13 @@ function SettingsPage() {
   } = useForm({
     resolver: zodResolver(settingsSchema),
     defaultValues: {
+      appTitle: settings?.app_title || 'Kounting Koral',
       defaultHourlyRateCAD: settings?.default_hourly_rate_cad || 15,
       defaultConversionRatePHP: settings?.default_conversion_rate_php || 43,
     },
     values: settings
       ? {
+          appTitle: settings.app_title || 'Kounting Koral',
           defaultHourlyRateCAD: settings.default_hourly_rate_cad,
           defaultConversionRatePHP: settings.default_conversion_rate_php,
         }
@@ -63,6 +65,7 @@ function SettingsPage() {
   const onSubmitSettings = async (data) => {
     try {
       await updateSettings.mutateAsync({
+        app_title: data.appTitle,
         default_hourly_rate_cad: data.defaultHourlyRateCAD,
         default_conversion_rate_php: data.defaultConversionRatePHP,
       });
@@ -141,7 +144,7 @@ function SettingsPage() {
           Settings
         </h1>
         <p className="text-slate-600 dark:text-slate-400 mt-1.5">
-          Set your defaults and quick work presets
+          Set your app title, defaults, and quick work presets
         </p>
         <div className="mt-4">
           <Button variant="outline" onClick={handleSignOut}>
@@ -163,6 +166,18 @@ function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
+          <Input
+            label={
+              <span className="inline-flex items-center gap-2">
+                <Type className="h-4 w-4 text-[var(--color-primary)]" />
+                App Title
+              </span>
+            }
+            placeholder="Kounting Koral"
+            error={errors.appTitle?.message}
+            {...register('appTitle')}
+          />
+
           <div>
             <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mode</p>
             <div className="grid grid-cols-2 gap-2">
@@ -357,7 +372,7 @@ function SettingsPage() {
         onClose={() => setShowClearConfirm(false)}
         onConfirm={handleClearAllData}
         title="Clear All Data"
-        description="This will permanently delete all your shifts, work presets, and reset your settings to defaults. This action cannot be undone."
+        description="This will permanently delete all your shifts, notes, work presets, and reset your settings to defaults. This action cannot be undone."
         confirmText="Clear All Data"
         loading={clearAllData.isPending}
       />

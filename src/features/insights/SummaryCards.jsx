@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { ChevronDown, ChevronUp, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { formatCurrency, formatHours } from '../../lib/calculations';
@@ -6,7 +5,6 @@ import {
   getWeekStart,
   getWeekEnd,
   getMonthStart,
-  getMonthEnd,
   getWeeklyShifts,
   getMonthlyShifts,
   getYearlyShifts,
@@ -14,8 +12,7 @@ import {
   formatDate,
 } from '../../lib/utils';
 
-function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+function SummaryCard({ title, dateRange, totals, shifts, isLoading, isExpanded, onToggle }) {
 
   if (isLoading) {
     return (
@@ -33,9 +30,9 @@ function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
   }
 
   return (
-    <div className="surface-card overflow-hidden">
+    <div className="surface-card overflow-hidden self-start">
       <button
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={onToggle}
         className="w-full p-4 sm:p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors"
       >
         <div className="flex justify-between items-start">
@@ -131,7 +128,7 @@ function SummaryCard({ title, dateRange, totals, shifts, isLoading }) {
   );
 }
 
-function WeeklySummary({ shifts, isLoading }) {
+function WeeklySummary({ shifts, isLoading, isExpanded = false, onToggle }) {
   const now = new Date();
   const weekStart = getWeekStart(now);
   const weekEnd = getWeekEnd(now);
@@ -146,14 +143,15 @@ function WeeklySummary({ shifts, isLoading }) {
       totals={totals}
       shifts={weeklyShifts}
       isLoading={isLoading}
+      isExpanded={isExpanded}
+      onToggle={onToggle}
     />
   );
 }
 
-function MonthlySummary({ shifts, isLoading }) {
+function MonthlySummary({ shifts, isLoading, isExpanded = false, onToggle }) {
   const now = new Date();
   const monthStart = getMonthStart(now);
-  const monthEnd = getMonthEnd(now);
   const monthlyShifts = getMonthlyShifts(shifts || [], now);
   const totals = calculateSummaryTotals(monthlyShifts);
   const dateRange = format(monthStart, 'MMMM yyyy');
@@ -165,11 +163,13 @@ function MonthlySummary({ shifts, isLoading }) {
       totals={totals}
       shifts={monthlyShifts}
       isLoading={isLoading}
+      isExpanded={isExpanded}
+      onToggle={onToggle}
     />
   );
 }
 
-function YearlySummary({ shifts, isLoading }) {
+function YearlySummary({ shifts, isLoading, isExpanded = false, onToggle }) {
   const now = new Date();
   const yearlyShifts = getYearlyShifts(shifts || [], now);
   const totals = calculateSummaryTotals(yearlyShifts);
@@ -182,6 +182,8 @@ function YearlySummary({ shifts, isLoading }) {
       totals={totals}
       shifts={yearlyShifts}
       isLoading={isLoading}
+      isExpanded={isExpanded}
+      onToggle={onToggle}
     />
   );
 }

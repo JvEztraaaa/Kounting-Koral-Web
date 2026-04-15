@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Plus,
   LayoutGrid,
   List,
   Table,
   Download,
+  Filter,
+  X,
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useShifts, ShiftModal, ShiftList, ShiftTable } from '../features/shifts';
+import { useSettings, useWorkPresets } from '../features/settings';
 import { KPIGrid } from '../features/insights';
 import { EmptyState, ErrorState } from '../components/common';
 import { Button } from '../components/ui';
@@ -15,9 +18,42 @@ import { calculateSummaryTotals, cn } from '../lib/utils.js';
 
 function DashboardPage() {
   const { data: shifts = [], isLoading, error, refetch } = useShifts();
+  const { data: settings } = useSettings();
+  const { data: presets = [] } = useWorkPresets();
   const [viewMode, setViewMode] = useState('list'); // 'list', 'grid', 'table'
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingShift, setEditingShift] = useState(null);
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedWorkplace, setSelectedWorkplace] = useState('all');
+
+  const appTitle = settings?.app_title || 'Kounting Koral';
+
+  const workplaceOptions = useMemo(() => {
+    const names = new Set();
+
+    shifts.forEach((shift) => {
+      if (shift.workplace_name) names.add(shift.workplace_name);
+    });
+
+    presets.forEach((preset) => {
+      if (preset.name) names.add(preset.name);
+    });
+
+    return Array.from(names).sort((a, b) => a.localeCompare(b));
+  }, [shifts, presets]);
+
+  const filteredShifts = useMemo(() => {
+    return shifts.filter((shift) => {
+      const dateMatches = selectedDate ? shift.shift_date === selectedDate : true;
+      const workplaceMatches =
+        selectedWorkplace === 'all' ? true : shift.workplace_name === selectedWorkplace;
+
+      return dateMatches && workplaceMatches;
+    });
+  }, [shifts, selectedDate, selectedWorkplace]);
+
+  const hasActiveFilters = !!selectedDate || selectedWorkplace !== 'all';
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -39,7 +75,7 @@ function DashboardPage() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const totals = calculateSummaryTotals(shifts);
+  const totals = calculateSummaryTotals(filteredShifts);
 
   const handleEditShift = (shift) => {
     setEditingShift(shift);
@@ -49,6 +85,11 @@ function DashboardPage() {
   const handleCloseModal = () => {
     setShowAddModal(false);
     setEditingShift(null);
+  };
+
+  const clearFilters = () => {
+    setSelectedDate('');
+    setSelectedWorkplace('all');
   };
 
   const exportToCSV = () => {
@@ -65,7 +106,7 @@ function DashboardPage() {
       'Notes',
     ];
 
-    const rows = shifts.map((shift) => [
+    const rows = filteredShifts.map((shift) => [
       shift.shift_date,
       shift.workplace_name,
       format(new Date(shift.start_time), 'HH:mm'),
@@ -107,10 +148,10 @@ function DashboardPage() {
       {/* Header */}
       <div className="page-shell px-5 py-5 sm:px-6 sm:py-6">
         <h1 className="page-header-title text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          Shift Overview <span className="text-3xl sm:text-4xl">🐚</span>
+          {appTitle} <span className="text-3xl sm:text-4xl">🐚</span>
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 mt-1.5 max-w-2xl">
-          A clean snapshot of your schedule, earnings, and activity with fewer distractions.
+          Shift overview, earnings, and activity with fast filters for date and workplace.
         </p>
       </div>
 
@@ -161,8 +202,17 @@ function DashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <Button variant="outline" onClick={exportToCSV} disabled={shifts.length === 0} className="w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <Button
+            variant={hasActiveFilters ? 'secondary' : 'outline'}
+            onClick={() => setShowFilters((prev) => !prev)}
+            className="w-full"
+          >
+            <Filter className="h-4 w-4 mr-2" />
+            {hasActiveFilters ? 'Filters Active' : 'Filters'}
+          </Button>
+
+          <Button variant="outline" onClick={exportToCSV} disabled={filteredShifts.length === 0} className="w-full">
             <Download className="h-4 w-4 mr-2" />
             Export
           </Button>
@@ -172,6 +222,54 @@ function DashboardPage() {
             Add Shift
           </Button>
         </div>
+
+        {(showFilters || hasActiveFilters) && (
+          <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/50 p-3 sm:p-4 space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">
+                  Filter by date
+                </label>
+                <input
+                  type="date"
+                  value={selectedDate}
+                  onChange={(event) => setSelectedDate(event.target.value)}
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5">
+                  Filter by workplace
+                </label>
+                <select
+                  value={selectedWorkplace}
+                  onChange={(event) => setSelectedWorkplace(event.target.value)}
+                  className="w-full rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2.5 text-sm text-slate-900 dark:text-slate-100 focus:border-[var(--color-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/20"
+                >
+                  <option value="all">All workplaces</option>
+                  {workplaceOptions.map((name) => (
+                    <option key={name} value={name}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+                Showing {filteredShifts.length} of {shifts.length} shift{shifts.length !== 1 ? 's' : ''}
+              </p>
+              {hasActiveFilters && (
+                <Button variant="ghost" size="sm" onClick={clearFilters}>
+                  <X className="h-4 w-4 mr-1" />
+                  Clear
+                </Button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Content */}
@@ -182,15 +280,22 @@ function DashboardPage() {
           actionLabel="Add your first shift"
           onAction={() => setShowAddModal(true)}
         />
+      ) : !isLoading && filteredShifts.length === 0 ? (
+        <EmptyState
+          title="No matching shifts"
+          description="Try another date or workplace, or clear your filters to view all shifts."
+          actionLabel="Clear filters"
+          onAction={clearFilters}
+        />
       ) : viewMode === 'table' ? (
         <ShiftTable
-          shifts={shifts}
+          shifts={filteredShifts}
           isLoading={isLoading}
           onEditShift={handleEditShift}
         />
       ) : (
         <ShiftList
-          shifts={shifts}
+          shifts={filteredShifts}
           isLoading={isLoading}
           viewMode={viewMode}
           onEditShift={handleEditShift}

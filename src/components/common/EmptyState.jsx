@@ -2,12 +2,14 @@ import { FileText, Plus } from 'lucide-react';
 import Button from '../ui/Button';
 
 function EmptyState({
-  icon: Icon = FileText,
+  icon = FileText,
   title = 'No data found',
   description = 'Get started by creating your first item.',
   actionLabel,
   onAction,
 }) {
+  const Icon = icon;
+
   return (
     <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
       <div className="rounded-full bg-gray-100 dark:bg-gray-800 p-4 mb-4">

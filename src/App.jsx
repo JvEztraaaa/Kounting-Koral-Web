@@ -9,6 +9,7 @@ import {
   ForgotPasswordPage,
   DashboardPage,
   InsightsPage,
+  NotesPage,
   StatsPage,
   SettingsPage,
 } from './pages';
@@ -47,6 +48,7 @@ function App() {
                 <Route path="settings" element={<SettingsPage />} />
                 <Route path="stats" element={<StatsPage />} />
                 <Route path="insights" element={<InsightsPage />} />
+                <Route path="notes" element={<NotesPage />} />
               </Route>
 
               {/* Catch all */}

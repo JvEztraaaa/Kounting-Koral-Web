@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useShifts } from '../features/shifts';
 import {
   WeeklySummary,
@@ -8,6 +9,11 @@ import { ErrorState } from '../components/common';
 
 function InsightsPage() {
   const { data: shifts = [], isLoading, error, refetch } = useShifts();
+  const [expandedCard, setExpandedCard] = useState(null);
+
+  const toggleCard = (key) => {
+    setExpandedCard((prev) => (prev === key ? null : key));
+  };
 
   if (error) {
     return (
@@ -32,10 +38,25 @@ function InsightsPage() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-5">
-        <WeeklySummary shifts={shifts} isLoading={isLoading} />
-        <MonthlySummary shifts={shifts} isLoading={isLoading} />
-        <YearlySummary shifts={shifts} isLoading={isLoading} />
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-5 items-start">
+        <WeeklySummary
+          shifts={shifts}
+          isLoading={isLoading}
+          isExpanded={expandedCard === 'week'}
+          onToggle={() => toggleCard('week')}
+        />
+        <MonthlySummary
+          shifts={shifts}
+          isLoading={isLoading}
+          isExpanded={expandedCard === 'month'}
+          onToggle={() => toggleCard('month')}
+        />
+        <YearlySummary
+          shifts={shifts}
+          isLoading={isLoading}
+          isExpanded={expandedCard === 'year'}
+          onToggle={() => toggleCard('year')}
+        />
       </div>
 
     </div>

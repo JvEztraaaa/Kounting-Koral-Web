@@ -2,14 +2,15 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '../../lib/supabase';
 import { useAuth } from '../auth';
 
-const SETTINGS_KEY = ['settings'];
-const PRESETS_KEY = ['work-presets'];
+const getSettingsKey = (userId) => ['settings', userId || 'anonymous'];
+const getPresetsKey = (userId) => ['work-presets', userId || 'anonymous'];
 
 export function useSettings() {
   const { user } = useAuth();
+  const settingsKey = getSettingsKey(user?.id);
 
   return useQuery({
-    queryKey: SETTINGS_KEY,
+    queryKey: settingsKey,
     queryFn: async () => {
       if (!user) return null;
 
@@ -33,6 +34,7 @@ export function useSettings() {
 export function useUpdateSettings() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const settingsKey = getSettingsKey(user?.id);
 
   return useMutation({
     mutationFn: async (settingsData) => {
@@ -43,7 +45,7 @@ export function useUpdateSettings() {
         .from('user_settings')
         .select('id')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (existing) {
         // Update existing settings
@@ -69,16 +71,17 @@ export function useUpdateSettings() {
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: SETTINGS_KEY });
+      queryClient.invalidateQueries({ queryKey: settingsKey });
     },
   });
 }
 
 export function useWorkPresets() {
   const { user } = useAuth();
+  const presetsKey = getPresetsKey(user?.id);
 
   return useQuery({
-    queryKey: PRESETS_KEY,
+    queryKey: presetsKey,
     queryFn: async () => {
       if (!user) return [];
 
@@ -98,6 +101,7 @@ export function useWorkPresets() {
 export function useAddPreset() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const presetsKey = getPresetsKey(user?.id);
 
   return useMutation({
     mutationFn: async (name) => {
@@ -119,7 +123,7 @@ export function useAddPreset() {
       return data;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: PRESETS_KEY });
+      queryClient.invalidateQueries({ queryKey: presetsKey });
     },
   });
 }
@@ -127,6 +131,7 @@ export function useAddPreset() {
 export function useRemovePreset() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const presetsKey = getPresetsKey(user?.id);
 
   return useMutation({
     mutationFn: async (id) => {
@@ -142,7 +147,7 @@ export function useRemovePreset() {
       return id;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: PRESETS_KEY });
+      queryClient.invalidateQueries({ queryKey: presetsKey });
     },
   });
 }
@@ -150,6 +155,10 @@ export function useRemovePreset() {
 export function useClearAllData() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const settingsKey = getSettingsKey(user?.id);
+  const presetsKey = getPresetsKey(user?.id);
+  const shiftsKey = ['shifts', user?.id || 'anonymous'];
+  const notesKey = ['notes', user?.id || 'anonymous'];
 
   return useMutation({
     mutationFn: async () => {
@@ -171,10 +180,19 @@ export function useClearAllData() {
 
       if (presetsError) throw presetsError;
 
+      // Delete all notes
+      const { error: notesError } = await supabase
+        .from('user_notes')
+        .delete()
+        .eq('user_id', user.id);
+
+      if (notesError && notesError.code !== '42P01') throw notesError;
+
       // Reset settings to defaults
       const { error: settingsError } = await supabase
         .from('user_settings')
         .update({
+          app_title: 'Kounting Koral',
           default_hourly_rate_cad: 15,
           default_conversion_rate_php: 43,
           updated_at: new Date().toISOString(),
@@ -186,9 +204,10 @@ export function useClearAllData() {
       return true;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: SETTINGS_KEY });
-      queryClient.invalidateQueries({ queryKey: PRESETS_KEY });
-      queryClient.invalidateQueries({ queryKey: ['shifts'] });
+      queryClient.invalidateQueries({ queryKey: settingsKey });
+      queryClient.invalidateQueries({ queryKey: presetsKey });
+      queryClient.invalidateQueries({ queryKey: shiftsKey });
+      queryClient.invalidateQueries({ queryKey: notesKey });
     },
   });
 }
