@@ -110,6 +110,28 @@
   #root {
     min-height: 100vh;
   }
+
+  :where(
+    a,
+    button,
+    summary,
+    select,
+    input[type='button'],
+    input[type='submit'],
+    input[type='reset'],
+    [role='button']
+  ) {
+    cursor: pointer;
+  }
+
+  :where(
+    button:disabled,
+    select:disabled,
+    input:disabled,
+    [role='button'][aria-disabled='true']
+  ) {
+    cursor: not-allowed;
+  }
   
   /* Focus visible styles - use theme color */
   *:focus-visible {
