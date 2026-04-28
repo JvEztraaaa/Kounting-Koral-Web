@@ -1,6 +1,6 @@
 # Kounting Koral Web
 
-A production-ready web application for tracking work shifts and calculating earnings in CAD and PHP.
+A web-application that tracks earnings, notes, and analytics. Made for my girlfriend <3
 
 ## 🐚 Features
 
@@ -11,19 +11,6 @@ A production-ready web application for tracking work shifts and calculating earn
 - **Multiple Views**: List, grid, and table views for shift data
 - **Filters & Search**: Filter by date range, workplace, and pay amount
 - **CSV Export**: Export shift data for external analysis
-- **Dark Mode**: Full dark mode support
-- **Keyboard Shortcuts**: Press `N` to add new shift, `/` to search
-
-## 🛠 Tech Stack
-
-- **Frontend**: React 19 + Vite
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase (Auth + PostgreSQL)
-- **State Management**: TanStack React Query
-- **Forms**: React Hook Form + Zod validation
-- **Date Handling**: date-fns
-- **Charts**: Recharts
-- **Icons**: Lucide React
 
 ## 🚀 Getting Started
 
