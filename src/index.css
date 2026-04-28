@@ -116,9 +116,13 @@
     button,
     summary,
     select,
+    label[for],
     input[type='button'],
     input[type='submit'],
     input[type='reset'],
+    input[type='file'],
+    input[type='checkbox'],
+    input[type='radio'],
     [role='button']
   ) {
     cursor: pointer;
