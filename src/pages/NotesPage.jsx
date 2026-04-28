@@ -52,6 +52,7 @@ function NotesPage() {
   const [showComposer, setShowComposer] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
   const [deletingNote, setDeletingNote] = useState(null);
+  const [previewImage, setPreviewImage] = useState(null);
   const [newItemText, setNewItemText] = useState('');
   const [fileError, setFileError] = useState('');
   const [draft, setDraft] = useState(createDefaultDraft());
@@ -265,6 +266,14 @@ function NotesPage() {
     }
   };
 
+  const openImagePreview = (src, title) => {
+    setPreviewImage({ src, title });
+  };
+
+  const closeImagePreview = () => {
+    setPreviewImage(null);
+  };
+
   if (error) {
     return (
       <ErrorState
@@ -396,11 +405,19 @@ function NotesPage() {
                 {note.note_type === NOTE_TYPES.image && (
                   <div className="space-y-3">
                     {note.image_data && (
-                      <img
-                        src={note.image_data}
-                        alt={note.title}
-                        className="w-full h-44 object-cover rounded-xl border border-slate-200 dark:border-slate-700"
-                      />
+                      <button
+                        type="button"
+                        className="w-full text-left"
+                        onClick={() => openImagePreview(note.image_data, note.title)}
+                        aria-label={`Open image from ${note.title}`}
+                      >
+                        <img
+                          src={note.image_data}
+                          alt={note.title}
+                          className="w-full h-44 object-cover rounded-xl border border-slate-200 dark:border-slate-700 transition-all hover:brightness-95"
+                        />
+                        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">Tap to view full image</p>
+                      </button>
                     )}
                     {note.body && (
                       <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap break-words">
@@ -584,6 +601,22 @@ function NotesPage() {
         confirmText="Delete"
         loading={deleteNote.isPending}
       />
+
+      <Modal
+        isOpen={!!previewImage}
+        onClose={closeImagePreview}
+        title={previewImage?.title || 'Image preview'}
+        description="Full-size view"
+        size="xl"
+      >
+        {previewImage?.src && (
+          <img
+            src={previewImage.src}
+            alt={previewImage.title || 'Note image'}
+            className="w-full max-h-[70vh] object-contain rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900"
+          />
+        )}
+      </Modal>
 
       <button
         onClick={openCreateComposer}
