@@ -53,27 +53,6 @@ npm run dev
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-## 📁 Project Structure
-
-```
-src/
-├── components/
-│   ├── ui/          # Reusable UI components (Button, Card, Modal, etc.)
-│   ├── layout/      # Layout components (AppLayout)
-│   └── common/      # Shared components (EmptyState, Skeleton, etc.)
-├── features/
-│   ├── auth/        # Authentication context and hooks
-│   ├── shifts/      # Shift CRUD, cards, list, table components
-│   ├── insights/    # KPI cards, summary cards, charts
-│   └── settings/    # Settings and presets hooks
-├── lib/
-│   ├── supabase.js  # Supabase client
-│   ├── calculations.js # Earnings calculation utilities
-│   ├── validation.js # Zod schemas
-│   └── utils.js     # Date formatting, helpers
-├── pages/           # Route pages
-└── App.jsx          # Main app with routing
-```
 
 ## 🗃 Database Schema
 
