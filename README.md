@@ -1,5 +1,3 @@
-# Kounting Koral Web
-
 A web-application that tracks earnings, notes, and analytics. Made for my girlfriend <3
 
 ## 🐚 Features
@@ -95,16 +93,16 @@ All tables have RLS enabled. Users can only access their own data.
 
 ```javascript
 // Original hours from time range (handles overnight shifts)
-originalHours = (endTime - startTime) / (1000 * 60 * 60)
-if (originalHours < 0) originalHours += 24
+originalHours = (endTime - startTime) / (1000 * 60 * 60);
+if (originalHours < 0) originalHours += 24;
 
 // Break deduction
-breakHours = breakMinutes / 60
-adjustedHours = max(0, originalHours - breakHours)
+breakHours = breakMinutes / 60;
+adjustedHours = max(0, originalHours - breakHours);
 
 // Earnings
-earningsCAD = adjustedHours * hourlyRateCAD
-earningsPHP = earningsCAD * conversionRatePHP
+earningsCAD = adjustedHours * hourlyRateCAD;
+earningsPHP = earningsCAD * conversionRatePHP;
 ```
 
 ### Validation Rules
